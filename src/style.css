@@ -1,53 +1,313 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
 body {
   font-family: Arial, sans-serif;
-  background-color: #111;
   color: #eee;
   text-align: center;
-  padding: 20px;
+  background: linear-gradient(135deg, #f0f2f5 0%, #e0e6ed 100%); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#results img {
-  width: 100px;
-  border-radius: 8px;
-  margin: 5px;
-  cursor: pointer;
-  transition: transform 0.2s;
+#introScreen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; 
+    max-width: 50%;
+    padding: 30px;
 }
 
-#results img:hover {
-  transform: scale(1.1);
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.user-section {
-  margin-bottom: 20px;
+#introScreen h1 {
+    color: #333;
+    font-size: 2.4em;
+    margin-bottom: 25px;
+    font-weight: 700;
 }
 
-#userName {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #555;
-  background-color: #333;
-  color: #eee;
+.highlight {
+    color: #6bbfff;
 }
 
-button {
-  padding: 8px 12px;
-  background-color: #007bff;
+.intro-tagline {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+}
+
+.intro-content h2 {
+    color: #444;
+    font-size: 1.8em;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    font-weight: 600;
+    position: relative;
+    display: inline-block; 
+}
+
+.intro-content h2::after { 
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -10px;
+    width: 50px;
+    height: 3px;
+    background-color: #6bbfff;
+    border-radius: 2px;
+}
+
+.steps-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin: 30px auto 40px;
+    max-width: 600px;
+}
+
+.steps-list li {
+    background: #f8f9fa;
+    margin-bottom: 15px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border-left: 6px solid #6bbfff;
+    font-size: 1em;
+    color: #333;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+}
+
+.steps-list li:hover {
+    transform: translateX(5px); 
+}
+
+.steps-list li strong {
+    color: #333;
+}
+
+.steps-list .step-number {
+    font-size: 1.5em;
+    margin-right: 15px;
+    font-weight: 700;
+    color: #6bbfff;
+}
+
+
+.beautiful_bt {
+  background: linear-gradient(45deg, #2382ca 0%, #6bbfff 100%); 
   color: white;
+  padding: 8px 30px;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px; 
+  font-size: 1.3em;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 15px rgba(35, 130, 202, 0.3); 
 }
 
-button:hover {
-  background-color: #0056b3;
+.beautiful_bt:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px rgba(35, 130, 202, 0.4);
 }
+
+#mainContent {
+  display: none;
+  padding: 30px;
+  color: #333;
+  width: 80%;
+}
+
+#mainContent  h1{
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  color: #6bbfff;
+}
+
+#userControlArea {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+
+
+#listAndSearchArea {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+#userListContainer, #searchAreaContainer {
+    padding: 15px;
+    border: 1px solid #dcd9d9;
+    border-radius: 8px;
+    min-height: 400px; 
+}
+
+#results {
+  display: grid;
+  padding-top: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+.movie-card img {
+  width: 100px;
+  border-radius: 7px;
+}
+
+.user-section-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.user-section-controls input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #9b9b9b;
+    border-radius: 5px;
+}
+
+#search {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#searchInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#userList {
+    list-style: none;
+    padding: 0;
+}
+
+#userList li {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    background-color: #e6f7ff;
+    border-left: 5px solid #6bbfff;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.delete-btn {
+    background-color: #ff6a6a; 
+    color: white;
+    border: none;
+    border-radius: 50%; 
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    font-size: 0.8em;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 0;
+    flex-shrink: 0; 
+    transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+    background-color: #cc0000;
+}
+
+.empty-list-message {
+    font-style: italic;
+    color: #6c757d;
+}
+
+#recommendationArea {
+    text-align: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+}
+
 
 #recommendationResult {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #222;
-  border-radius: 8px;
-  text-align: left;
-  white-space: pre-wrap; 
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #c9c9c9;
+    border-radius: 5px;
+    background-color: #ffffff;
+    width: 99%;
+    min-height: 10px;
+    
+}
+
+#recommendBtn {
+  margin-top: 15px;
+}
+
+
+.advice-text {
+    font-size: 0.9em;
+    color: #888;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+
+.action-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.load { background-color: #28a745; color: white; }
+.load:hover { background-color: #218838; }
+
+.save { background-color: #6bbfff; color: white; margin-top: 20px;}
+.save:hover { background-color: #1e73cf; }
+
+.search { background-color: #6c757d; color: white; }
+.search:hover { background-color: #5a6268; }
+
+
+@media (max-width: 1000px) {
+    body, #introScreen {
+      min-width: none;
+      max-width: none;
+    }
+
+    #listAndSearchArea {
+        grid-template-columns: 1fr; 
+    }
 }

@@ -1,3 +1,5 @@
+import {INITIAL_DB_DATA} from "./initialData.js";
+
 const API_KEY = "69652562";
 const BASE_URL = "https://www.omdbapi.com/";
 const resultsDiv = document.getElementById("results");
@@ -7,282 +9,28 @@ const listOwnerSpan = document.getElementById("listOwner");
 const recommendBtn = document.getElementById("recommendBtn");
 const recommendationResult = document.getElementById("recommendationResult");
 
-// Banco de dados simulado
+// banco de dados simulado
 let currentUserPrefs = [];
 let allUserData = {};
 
-// Inicia o BD
+// inicia o BD
 function initDatabase() {
   const dataFromStorage = localStorage.getItem("movieRecsDB");
   if (dataFromStorage) {
     allUserData = JSON.parse(dataFromStorage);
   } else {
     // Se for a primeira vez, cria um usuário fake
-    allUserData = {
-      "Bruno J.": [
-        "Vingadores: Ultimato",
-        "Homem-Aranha: Sem Volta Para Casa",
-        "Pantera Negra",
-        "Vingadores: Guerra Infinita",
-        "Guardiões da Galáxia",
-        "Logan"
-      ],
-      "Diana Y.": [
-        "Batman: O Cavaleiro das Trevas",
-        "Coringa",
-        "O Esquadrão Suicida (2021)",
-        "Mulher-Maravilha",
-        "Watchmen: O Filme",
-        "O Homem de Aço"
-      ],
-      "Miguel S.": [
-        "Toy Story",
-        "Divertida Mente",
-        "Procurando Nemo",
-        "Up - Altas Aventuras",
-        "Soul",
-        "Wall-E"
-      ],
-      "Isabella I.": [
-        "O Rei Leão (1994)",
-        "A Bela e a Fera (1991)",
-        "Aladdin (1992)",
-        "A Pequena Sereia (1989)",
-        "Moana: Um Mar de Aventuras",
-        "Enrolados"
-      ],
-
-      "Carlos E.": [
-        "O Poderoso Chefão",
-        "Laranja Mecânica",
-        "2001: Uma Odisseia no Espaço",
-        "Apocalypse Now",
-        "Taxi Driver",
-      ],
-
-      "Sofia M.": [
-        "Corra!",
-        "Hereditário",
-        "O Silêncio dos Inocentes",
-        "Um Lugar Silencioso",
-        "Psicose",
-        "Parasita",
-      ],
-
-      "Leo W.": [
-        "A Viagem de Chihiro",
-        "Homem-Aranha no Aranhaverso",
-        "O Senhor dos Anéis: O Retorno do Rei",
-        "Wall-E",
-        "O Castelo Animado",
-      ],
-      "Clara Q.": [
-        "Casablanca",
-        "O Poderoso Chefão",
-        "...E o Vento Levou",
-        "Cantando na Chuva",
-        "Psicose",
-        "Laranja Mecânica"
-      ],
-      "Ricardo N.": [
-        "John Wick: De Volta ao Jogo",
-        "Mad Max: Estrada da Fúria",
-        "Missão: Impossível - Efeito Fallout",
-        "Top Gun: Maverick",
-        "Duro de Matar",
-        "Gladiador"
-      ],
-      "Tiago E.": [
-        "Duna (2021)",
-        "Blade Runner 2049",
-        "A Chegada",
-        "Interestelar",
-        "Matrix",
-        "O Exterminador do Futuro 2"
-      ],
-      "Laura K.": [
-        "Se Beber, Não Case!",
-        "Superbad: É Hoje",
-        "As Branquelas",
-        "Minha Mãe é uma Peça",
-        "Deadpool",
-        "Debi & Lóide: Dois Idiotas em Apuros"
-      ],
-      "Amanda R.": [
-        "Diário de uma Paixão",
-        "10 Coisas que Eu Odeio em Você",
-        "Questão de Tempo",
-        "Como Eu Era Antes de Você",
-        "Orgulho e Preconceito (2005)",
-        "Simplesmente Acontece"
-      ],
-      "Pedro L.": [
-        "O Senhor dos Anéis: A Sociedade do Anel",
-        "Harry Potter e a Pedra Filosofal",
-        "Piratas do Caribe: A Maldição do Pérola Negra",
-        "Indiana Jones e os Caçadores da Arca Perdida",
-        "Jurassic Park: O Parque dos Dinossauros",
-        "Jumanji: Bem-vindo à Selva"
-      ],
-      "Kenji K.": [
-        "Your Name",
-        "Akira",
-        "Perfect Blue",
-        "A Viagem de Chihiro",
-        "Jujutsu Kaisen 0: O Filme",
-        "Ghost in the Shell (1995)"
-      ],
-      "Yuna Y.": [
-        "Round 6",
-        "Alquimia das Almas",
-        "A Lição (The Glory)",
-        "My Demon",
-        "Sweet Home",
-        "O Rei de Porcelana"
-      ],
-      "Mariana D.": [
-        "Pretendente Surpresa",
-        "O que Houve com a Secretária Kim?",
-        "Sorriso Real",
-        "Hometown Cha-Cha-Cha",
-        "Aterrissagem Forçada no Amor",
-        "O Rei de Porcelana"
-      ],
-
-      "Rodrigo S.": [
-        "Round 6",
-        "Alice in Borderland",
-        "Sweet Home",
-        "A Lição (The Glory)",
-        "Kingdom",
-        "Vagabond"
-      ],
-
-      "Camila Q.": [
-        "Tudo Bem Não Ser Normal",
-        "Goblin",
-        "Rainha das Lágrimas",
-        "Uma Advogada Extraordinária",
-        "Vincenzo",
-        "My Demon"
-      ],
-      
-      "Akira W.": [
-        "Alice in Borderland",
-        "One Piece (Live Action)",
-        "First Love (Hatsukoi)",
-        "Hana Yori Dango",
-        "Nodame Cantabile",
-        "Midnight Diner: Tokyo Stories"
-      ],
-
-      "Mei K.": [
-        "O Indomável (The Untamed)",
-        "Jardim de Meteoros (2018)",
-        "Love O2O",
-        "Amor Eterno (Ten Miles of Peach Blossoms)",
-        "Go Go Squid!",
-        "Cinzas do Amor (Ashes of Love)"
-      ],
-      
-      "Daniela S.": [
-        "Descendentes do Sol",
-        "Aterrissagem Forçada no Amor",
-        "Vincenzo",
-        "Alquimia das Almas",
-        "Strong Woman Do Bong-soon",
-        "Enquanto Você Dormia"
-      ],
-      "Helena A.": [
-        "My Mister (O Meu Senhor)",
-        "Signal (Sinal)",
-        "Misaeng: Incomplete Life",
-        "Stranger (Forest of Secrets)",
-        "Sky Castle",
-        "Prison Playbook"
-      ],
-
-      "Roberto L.": [
-        "Reply 1988 (Responde 1988)",
-        "Hospital Playlist (Diário de um Médico)",
-        "Because This Is My First Life (Esta é Minha Primeira Vida)",
-        "Navillera",
-        "Our Beloved Summer (Nosso Eterno Verão)",
-        "When the Weather Is Fine (Quando o Tempo Está Bom)"
-      ],
-
-      "Vanessa H.": [
-        "The World of the Married (Mundo dos Casados)",
-        "Penthouse: War in Life (Cobertura: Guerra na Vida)",
-        "The Last Empress (A Última Imperatriz)",
-        "Graceful Family (Família Graciosa)",
-        "Secret Love (Amor Secreto)",
-        "Eve (A Vingança de Eva)"
-      ],
-
-      "Eduardo J.": [
-        "Nirvana in Fire (Nirvana em Fogo)",
-        "Unnatural (Morte Não Natural)",
-        "Someday or One Day (Um Dia)",
-        "The Story of Minglan (A História de Minglan)",
-        "Liar Game (Jogo da Mentira)",
-        "Joy of Life (Alegria da Vida)"
-      ],
-      "Gabriela M.": [
-        "Diário de uma Paixão",
-        "Como Eu Era Antes de Você",
-        "A Culpa é das Estrelas",
-        "Titanic",
-        "Um Dia",
-        "PS: Eu Te Amo"
-      ],
-
-      "Lucas R.": [
-        "Como Perder um Homem em 10 Dias",
-        "De Repente 30",
-        "O Casamento do Meu Melhor Amigo",
-        "Uma Linda Mulher",
-        "Sintonia de Amor",
-        "Harry e Sally - Feitos Um para o Outro"
-      ],
-
-      "Leticia M.": [
-        "Orgulho e Preconceito (2005)",
-        "Bridgerton",
-        "Desejo e Reparação",
-        "Outlander",
-        "Razão e Sensibilidade (1995)",
-        "Adoráveis Mulheres (2019)"
-      ],
-
-      "Renan L.": [
-        "Brilho Eterno de uma Mente sem Lembranças",
-        "(500) Dias com Ela",
-        "Questão de Tempo",
-        "La La Land: Cantando Estações",
-        "Ela (Her)",
-        "Me Chame Pelo Seu Nome"
-      ],
-
-      "Sofia V.": [
-        "Para Todos os Garotos que Já Amei",
-        "A Barraca do Beijo",
-        "Com Amor, Simon",
-        "10 Coisas que Eu Odeio em Você",
-        "Crepúsculo",
-        "Trilogia Rua do Medo"
-      ]
-    }
+    allUserData = INITIAL_DB_DATA;
     saveToStorage();
   }
 }
 
-// Salva o BD no localStorage
+// salva o BD no local storage
 function saveToStorage() {
   localStorage.setItem("movieRecsDB", JSON.stringify(allUserData));
 }
 
-// Salva a lista do usuário ativo no BD
+// salva a lista do usuário ativo no BD
 document.getElementById("saveBtn").addEventListener("click", () => {
   const userName = userNameInput.value.trim();
   if (!userName) {
@@ -299,7 +47,7 @@ document.getElementById("saveBtn").addEventListener("click", () => {
   alert("Sua lista foi salva!");
 });
 
-// Carrega a lista do usuário
+// carrega a lista do usuário
 document.getElementById("loadBtn").addEventListener("click", () => {
   const userName = userNameInput.value.trim();
   if (!userName) {
@@ -320,7 +68,7 @@ document.getElementById("loadBtn").addEventListener("click", () => {
   }
 });
 
-// Busca
+// busca
 document.getElementById("searchBtn").addEventListener("click", async () => {
   const query = document.getElementById("searchInput").value;
   const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&s=${encodeURIComponent(query)}`);
@@ -334,16 +82,34 @@ document.getElementById("searchBtn").addEventListener("click", async () => {
 
 function showResults(movies) {
   resultsDiv.innerHTML = "";
+
   movies.forEach(m => {
+    const card = document.createElement("div");
+    card.classList.add("movie-card");
+
     const img = document.createElement("img");
-    img.src = m.Poster !== "N/A" ? m.Poster : "https://via.placeholder.com/150";
-    img.title = m.Title;
-    img.onclick = () => addToList(m.Title);
-    resultsDiv.appendChild(img);
+
+    img.src = m.Poster !== "N/A" ? m.Poster : "../assets/no-img.png";
+    img.alt = m.Title;
+
+    img.onerror = () => {
+      img.src = "../assets/no-img.png";
+    };
+
+    const title = document.createElement("p");
+    title.classList.add("movie-title");
+    title.textContent = m.Title;
+
+    card.onclick = () => addToList(m.Title);
+
+    card.appendChild(img);
+    card.appendChild(title);
+
+    resultsDiv.appendChild(card);
   });
 }
 
-// Lista de Preferências do Usuário
+// lista de Preferências do Usuário
 function addToList(title) {
   // Se já existe, remove para adicionar no topo
   if (currentUserPrefs.includes(title)) {
@@ -355,19 +121,42 @@ function addToList(title) {
 
 function renderList() {
   userListUL.innerHTML = "";
+  
+  if (currentUserPrefs.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "Sua lista está vazia. Comece a buscar!";
+    li.classList.add("empty-list-message");
+    userListUL.appendChild(li);
+    return;
+  }
+  
   currentUserPrefs.forEach((t, i) => {
     const li = document.createElement("li");
-    li.textContent = `${i + 1}. ${t}`;
+    
+    const textSpan = document.createElement("span");
+    textSpan.textContent = `${i + 1}. ${t}`;
+    
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = 'X';
+    deleteBtn.classList.add('delete-btn');
+    
+    deleteBtn.onclick = (event) => {
+      event.stopPropagation(); 
+      removeFromList(t);
+    };
+
+    li.appendChild(textSpan);
+    li.appendChild(deleteBtn);
     userListUL.appendChild(li);
   });
 }
 
-// Lógica de Recomendação
+// lógica de Recomendação
 recommendBtn.addEventListener("click", () => {
   const currentUser = userNameInput.value.trim();
   if (!currentUser || currentUserPrefs.length < 2) {
     recommendationResult.textContent =
-      "Você precisa ter uma lista com pelo menos 2 filmes (e ter digitado seu nome) para receber recomendações.";
+      "Você precisa ter uma lista com pelo menos 2 filmes e ter digitado seu nome para receber recomendações.";
     return;
   }
 
@@ -381,7 +170,7 @@ recommendBtn.addEventListener("click", () => {
   }
 });
 
-// Encontra recomendações baseadas em usuários similares
+// encontra recomendações baseadas em usuários similares
 function findRecommendations(currentUser) {
   const userA_list = currentUserPrefs;
   let bestMatch = { name: null, similarity: -1 };
@@ -417,6 +206,7 @@ function findRecommendations(currentUser) {
 
   return []; // Não encontrou recomendações
 }
+
 function calculateInversions(listA, listB) {
   const commonMovies = listA.filter(movie => listB.includes(movie));
   const listA_common = listA.filter(movie => commonMovies.includes(movie));
@@ -432,6 +222,7 @@ function calculateInversions(listA, listB) {
 
   return { inversions, commonMovies };
 }
+
 function countInversionsInArray(arr) {
   let inversions = 0;
   for (let i = 0; i < arr.length - 1; i++) {
@@ -443,4 +234,30 @@ function countInversionsInArray(arr) {
   }
   return inversions;
 }
+
+const introScreen = document.getElementById("introScreen");
+const startBtn = document.getElementById("startBtn");
+const mainContent = document.getElementById("mainContent");
+
+startBtn.addEventListener("click", () => {
+    console.log("clicou");
+    introScreen.style.display = 'none';
+    mainContent.style.display = 'block'; 
+});
+
+function removeFromList(title) {
+  currentUserPrefs = currentUserPrefs.filter(item => item !== title);
+  
+  renderList();
+
+  const userName = userNameInput.value.trim();
+  if (userName) {
+    allUserData[userName] = currentUserPrefs;
+    saveToStorage();
+    alert(`"${title}" removido e lista salva!`);
+  }
+}
+
+
+
 initDatabase();

@@ -3,32 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <title>Comparador de Gostos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Noto+Color+Emoji&family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Recomendação de Filmes e Séries</h1>
+    <div id="introScreen">
+        <h1>Bem-vindo ao <span class="highlight">Rankify</span>!</h1>
+        <div class="intro-content">
+          <p class="intro-tagline">Este projeto consiste na implementação de um sistema de filtragem colaborativa que utiliza a Contagem de Inversões para determinar a similaridade entre as preferências de filmes de diferentes usuários.</p>
+          
+          <h2>Como Funciona?</h2>
+        
+          <ul class="steps-list">
+            <li>
+              <span class="step-number">1.</span> 
+              Busque filmes e adicione-os à sua lista na ordem de preferência (o filme que você mais gosta fica no topo).
+            </li>
+            <li>
+              <span class="step-number">2.</span> 
+              Salve sua lista com seu nome. Você pode carregar sua lista depois a qualquer momento.
+            </li>
+            <li>
+              <span class="step-number">3.</span> 
+              Nosso algoritmo compara o ranqueamento da sua lista com a de outros usuários.
+            </li>
+            <li>
+              <span class="step-number">4.</span> 
+              Você receberá recomendações de filmes com base no histórico de outros usuários com gosto semelhante ao seu.
+            </li>
+            </ul>
+            <button id="startBtn" class="beautiful_bt">Começar</button>
+        </div>
+    </div>
+    <div id="mainContent" style="display: none;">
+      <h1>Rankify</h1>
 
-  <div class="user-section">
-    <input type="text" id="userName" placeholder="Digite seu nome...">
-    <button id="loadBtn">Carregar Minha Lista</button>
-    <button id="saveBtn">Salvar Lista</button>
-  </div>
+      <section id="userControlArea">
+          <h2>Gerenciar Minha Lista</h2>
+          
+          <div class="user-section-controls">
+              <input type="text" id="userName" placeholder="Digite seu nome (Dani S., Bruno J., etc.)">
+              <button id="loadBtn" class="action-btn load">Carregar Lista</button>
+          </div>
 
-  <div id="search">
-    <input type="text" id="searchInput" placeholder="Buscar filme...">
-    <button id="searchBtn">Buscar</button>
-  </div>
+          <div id="listAndSearchArea">
+              <div id="userListContainer">
+                  <h3>Sua Lista Ranqueada (<span id="listOwner">...</span>)</h3>
+                  <p class="advice-text">Clique nos posters abaixo para adicionar ou reordenar filmes (o topo é a maior preferência).</p>
+                  <ul id="userList">
+                      <li class="empty-list-message">Sua lista está vazia. Comece a buscar!</li>
+                  </ul>
+                  <button id="saveBtn" class="action-btn save">Salvar Lista</button>
+              </div>
 
-  <div id="results"></div>
+              <div id="searchAreaContainer">
+                  <h3>Buscar Novos Filmes</h3>
+                  <div id="search">
+                      <input type="text" id="searchInput" placeholder="Ex: Vingadores, Batman, Matrix...">
+                      <button id="searchBtn" class="action-btn search">Buscar</button>
+                  </div>
+                  <p class="advice-text">Resultados da OMDb API. Clique em um poster para adicioná-lo ao seu ranqueamento.</p>
+                  <div id="results"></div>
+              </div>
+          </div>
+      </section>
 
-  <h2>Preferências de <span id="listOwner">...</span></h2>
-  <ul id="userList"></ul>
+      <section id="recommendationArea">
+          <h2>Obter Recomendações</h2>
+        
+          <div id="recommendationResult">
+              <p class="advice-text">As recomendações aparecerão aqui após a análise de similaridade.</p>
+          </div>
 
-  <h2>Recomendações para você</h2>
-  <button id="recommendBtn">Buscar Recomendações</button>
-  
-  <div id="recommendationResult"></div>
+          <button id="recommendBtn" class="beautiful_bt">Buscar</button>
+          
+      </section>
+    </div>
 
-  <script src="script.js"></script>
+    <div id="advice"></div>
+
+    <script src="script.js" type="module"></script>
 </body>
 </html>
