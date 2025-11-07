@@ -361,4 +361,86 @@ function renderList() {
     userListUL.appendChild(li);
   });
 }
+
+// Lógica de Recomendação
+recommendBtn.addEventListener("click", () => {
+  const currentUser = userNameInput.value.trim();
+  if (!currentUser || currentUserPrefs.length < 2) {
+    recommendationResult.textContent =
+      "Você precisa ter uma lista com pelo menos 2 filmes (e ter digitado seu nome) para receber recomendações.";
+    return;
+  }
+
+  const recommendations = findRecommendations(currentUser);
+  
+  if (recommendations.length > 0) {
+    recommendationResult.textContent = 
+        `Encontramos usuários com gostos parecidos! \n\nRecomendações para você:\n- ${recommendations.join('\n- ')}`;
+  } else {
+    recommendationResult.textContent = "Não encontramos nenhuma recomendação nova com base nos usuários atuais. Tente adicionar mais filmes à sua lista.";
+  }
+});
+
+// Encontra recomendações baseadas em usuários similares
+function findRecommendations(currentUser) {
+  const userA_list = currentUserPrefs;
+  let bestMatch = { name: null, similarity: -1 };
+
+  for (const otherUser in allUserData) {
+    if (otherUser === currentUser) continue; 
+
+    const userB_list = allUserData[otherUser];
+
+    const { inversions, commonMovies } = calculateInversions(userA_list, userB_list);
+
+    if (commonMovies.length < 2) continue; 
+    const n = commonMovies.length;
+    const maxInversions = (n * (n - 1)) / 2;
+    const similarity = maxInversions === 0 ? 100 : ((maxInversions - inversions) / maxInversions) * 100;
+
+    console.log(`Comparando com ${otherUser}: Similaridade de ${similarity.toFixed(0)}%`);
+
+    if (similarity > bestMatch.similarity) {
+      bestMatch = { name: otherUser, similarity: similarity };
+    }
+  }
+
+  if (bestMatch.name && bestMatch.similarity > 40) {
+    console.log(`Seu "vizinho mais próximo" é: ${bestMatch.name}`);
+    
+    const bestMatchList = allUserData[bestMatch.name];
+    
+    const recommendations = bestMatchList.filter(movie => !userA_list.includes(movie));
+    
+    return recommendations;
+  }
+
+  return []; // Não encontrou recomendações
+}
+function calculateInversions(listA, listB) {
+  const commonMovies = listA.filter(movie => listB.includes(movie));
+  const listA_common = listA.filter(movie => commonMovies.includes(movie));
+  const listB_common = listB.filter(movie => commonMovies.includes(movie));
+
+  const rankMapA = new Map();
+  listA_common.forEach((movie, index) => {
+    rankMapA.set(movie, index);
+  });
+
+  const ranksB = listB_common.map(movie => rankMapA.get(movie));
+  const inversions = countInversionsInArray(ranksB);
+
+  return { inversions, commonMovies };
+}
+function countInversionsInArray(arr) {
+  let inversions = 0;
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[i] > arr[j]) {
+        inversions++;
+      }
+    }
+  }
+  return inversions;
+}
 initDatabase();
