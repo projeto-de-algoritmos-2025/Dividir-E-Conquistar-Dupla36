@@ -24,11 +24,11 @@
 
 <div align="center">
 
-<a href="https://youtu.be/dY56_IJ9qys"><img src="https://i.imgur.com/kzR0glG.png" width="50%"></a>
+<a href="https://www.youtube.com/watch?v=1LhfN7_QlTk"><img src="https://i.imgur.com/jfNm6Qx.png" width="50%"></a>
 </div>
 
 <div align="center">
-Link: <a href="https://youtu.be/dY56_IJ9qys"> https://youtu.be/dY56_IJ9qys</a>
+Link: <a href="https://www.youtube.com/watch?v=1LhfN7_QlTk"> https://www.youtube.com/watch?v=1LhfN7_QlTk</a>
   <br>
 Autores: <a href=https://github.com/danielle-soaress">Danielle Soares</a> e <a href=https://github.com/Leticia-Arisa-K-Higa">Leticia Arisa</a>.
 </div>
