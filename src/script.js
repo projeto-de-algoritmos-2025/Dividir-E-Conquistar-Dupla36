@@ -218,21 +218,46 @@ function calculateInversions(listA, listB) {
   });
 
   const ranksB = listB_common.map(movie => rankMapA.get(movie));
-  const inversions = countInversionsInArray(ranksB);
+
+  const { inversions } = countInversionsOptimized(ranksB);
 
   return { inversions, commonMovies };
 }
 
-function countInversionsInArray(arr) {
-  let inversions = 0;
-  for (let i = 0; i < arr.length - 1; i++) {
-    for (let j = i + 1; j < arr.length; j++) {
-      if (arr[i] > arr[j]) {
-        inversions++;
-      }
+function countInversionsOptimized(arr) {
+  if (arr.length <= 1) return { inversions: 0, sorted: arr };
+
+  const mid = Math.floor(arr.length / 2);
+  const left = arr.slice(0, mid);
+  const right = arr.slice(mid);
+
+  const leftResult = countInversionsOptimized(left);
+  const rightResult = countInversionsOptimized(right);
+  const mergeResult = mergeAndCount(leftResult.sorted, rightResult.sorted);
+
+  const totalInversions =
+    leftResult.inversions + rightResult.inversions + mergeResult.inversions;
+
+  return { inversions: totalInversions, sorted: mergeResult.sorted };
+}
+
+function mergeAndCount(left, right) {
+  let i = 0, j = 0, inversions = 0;
+  const sorted = [];
+
+  while (i < left.length && j < right.length) {
+    if (left[i] <= right[j]) {
+      sorted.push(left[i++]);
+    } else {
+      sorted.push(right[j++]);
+      inversions += left.length - i;
     }
   }
-  return inversions;
+
+  return {
+    inversions,
+    sorted: [...sorted, ...left.slice(i), ...right.slice(j)]
+  };
 }
 
 const introScreen = document.getElementById("introScreen");
