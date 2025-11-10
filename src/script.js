@@ -212,6 +212,11 @@ function calculateInversions(listA, listB) {
   const listA_common = listA.filter(movie => commonMovies.includes(movie));
   const listB_common = listB.filter(movie => commonMovies.includes(movie));
 
+  // para cada filme na ordem de listB_common, pega a posição do mesmo filme em listA_common
+  // listA_common = ['A','B','C'] e 
+  // listB_common = ['B','C','A'], 
+  // ranksB = [1, 2, 0].
+
   const rankMapA = new Map();
   listA_common.forEach((movie, index) => {
     rankMapA.set(movie, index);
@@ -219,22 +224,26 @@ function calculateInversions(listA, listB) {
 
   const ranksB = listB_common.map(movie => rankMapA.get(movie));
 
+  // chama o algoritmo
   const { inversions } = countInversionsOptimized(ranksB);
 
   return { inversions, commonMovies };
 }
 
 function countInversionsOptimized(arr) {
-  if (arr.length <= 1) return { inversions: 0, sorted: arr };
+  if (arr.length <= 1) return { inversions: 0, sorted: arr }; // caso base
 
+  // divide o array no meio 
   const mid = Math.floor(arr.length / 2);
   const left = arr.slice(0, mid);
   const right = arr.slice(mid);
 
+  // aplica merge and count que produz união ordenada
   const leftResult = countInversionsOptimized(left);
   const rightResult = countInversionsOptimized(right);
   const mergeResult = mergeAndCount(leftResult.sorted, rightResult.sorted);
 
+  // inversões = inversões da esquerda + direita + cruzadas
   const totalInversions =
     leftResult.inversions + rightResult.inversions + mergeResult.inversions;
 
@@ -247,10 +256,12 @@ function mergeAndCount(left, right) {
 
   while (i < left.length && j < right.length) {
     if (left[i] <= right[j]) {
-      sorted.push(left[i++]);
+      sorted.push(left[i++]); // não há inversões
     } else {
       sorted.push(right[j++]);
-      inversions += left.length - i;
+      inversions += left.length - i; // há inversões
+      // todos os elementos restantes em left são maiores que right[j]
+      // [2,5,6] e [1,2]
     }
   }
 
